@@ -6,7 +6,9 @@ const cd = $('.cd');
 const heading = $('.player .song-name')
 const cdThumb = $('.cd-thumb')
 const audio = $('#audio')
-const playBtn = $('.icon-play')
+const progress = $('#progress')
+const playBtn = $('.btn-toggle-play')
+
 
 
 const app = {
@@ -105,6 +107,15 @@ const app = {
         const _this = this
         const cdWidth = cd.offsetWidth;
 
+        // CD rotate 
+        const cdThumbAnimate = cdThumb.animate ([
+            {transform: 'rotate(360deg'}
+        ], {
+            duration: 10000,
+            iterations: Infinity
+        })
+        cdThumbAnimate.pause();
+
         document.onscroll = function() {
             const scrollTop = document.documentElement.scrollTop || window.scrollY;
             const newCdWidth = cdWidth - scrollTop;
@@ -115,28 +126,47 @@ const app = {
 
         playBtn.onclick = function() {
             if(_this.isPlaying) {
-                _this.isPlaying = false;
                 audio.pause();
-                player.classList.remove('playing');
             } else {
-                _this.isPlaying = true;
                 audio.play();
-                player.classList.add('playing');
             }
+        }
+
+        //Song playing
+        audio.onplay = function() {
+            _this.isPlaying = true
+            player.classList.add('playing');
+            cdThumbAnimate.play(); 
+        }
+        //song on pause
+        audio.onpause = function() {
+            _this.isPlaying = false;
+            player.classList.remove('playing');
+            cdThumbAnimate.pause();
+        } 
+        //song progress
+        audio.ontimeupdate = function() {
+            if (audio.duration) {
+                const progPer = Math.floor(audio.currentTime *100 / audio.duration);
+                progress.value = progPer
+            }
+        }
+        // seeking song
+        progress.onchange = function(e) {
+            const seekTime = Math.floor(e.target.value / 100  * audio.duration);
+            audio.currentTime = seekTime;
         }
     },
     loadCurrentSong: function() { 
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
-        audio.scr = this.currentSong.path;
-        // audio.setAttribute('type', 'audio/mpeg')
-        
+        audio.src = this.currentSong.path;
     },
     start: function() {
-        this.defineProperties ()
+        this.defineProperties()
         
-        this. handleEvents()
-
+        this.handleEvents()
+        
         this.loadCurrentSong()
 
         this.render()

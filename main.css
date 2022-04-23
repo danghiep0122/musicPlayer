@@ -60,20 +60,9 @@
     margin-bottom: 35px;
 }
 
-.player-control .fa-play-circle {
+.player-control .fa-play-circle, .fa-pause-circle {
     font-size: 3rem;
     color: #ec1f55;
-}
-
-.btn.pause {
-    color: white;
-    background-color: #ec1f55;
-    width: 42px;
-    height: 42px;
-    border-radius: 50%;
-    justify-content: center;
-    align-items: center;
-    font-size: 1.5rem;
 }
 
 .player.playing .icon-play{
@@ -93,25 +82,6 @@
     width: 90vw;
     accent-color: #ec1f55;
 }
-
-/* .player .time-seek {
-    margin: 0 auto 20px;
-    height: 6px;
-    background-color: rgba(0, 0, 0, .2);
-    width: 94vw;
-    position: relative;
-    border-radius: 2px;
-}
-
-.player .time-seek .seek-btn {
-    height: 6px;
-    width: 12px;
-    background-color: #ec1f55;
-    position: absolute;
-    top: 0;
-    left: 50vw;
-    border-radius: 2px;
-} */
 
 .play-list {
     margin: 410px auto 10px;
