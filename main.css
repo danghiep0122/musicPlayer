@@ -65,11 +65,40 @@
     color: #ec1f55;
 }
 
-.player .time-seek {
+.btn.pause {
+    color: white;
+    background-color: #ec1f55;
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5rem;
+}
+
+.player.playing .icon-play{
+    display: none;
+}
+
+.player.playing .icon-pause{
+    display: flex;
+}
+
+.player .icon-pause {
+    display: none;
+}
+
+.progress {
+    margin: 0 auto 15px;
+    width: 90vw;
+    accent-color: #ec1f55;
+}
+
+/* .player .time-seek {
     margin: 0 auto 20px;
     height: 6px;
-    width: 94vw;
     background-color: rgba(0, 0, 0, .2);
+    width: 94vw;
     position: relative;
     border-radius: 2px;
 }
@@ -82,7 +111,7 @@
     top: 0;
     left: 50vw;
     border-radius: 2px;
-}
+} */
 
 .play-list {
     margin: 410px auto 10px;

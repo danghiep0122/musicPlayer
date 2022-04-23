@@ -13,7 +13,7 @@
     
     
     <div class="music-player">
-    <div class="player">
+    <div class="player ">
         <h3>Now Playing:</h3>
         <span class="song-name">String 57 & 9th</span>
         <div class="cd">
@@ -21,16 +21,31 @@
             style="background-image: url('https://i.ytimg.com/vi/jTLhQf5KJSc/maxresdefault.jpg')"></div>
         </div>
         <div class="player-control">
-            <i class="fas fa-retweet"></i>
-            <i class="fas fa-angle-double-left"></i>
-            <i class="fas fa-play-circle"></i>
-            <i class="fas fa-angle-double-right"></i>
-            <i class="fas fa-random"></i>
+            <div class="btn repeat">
+                <i class="fas fa-retweet"></i>
             </div>
-            <div class="time-seek">
-                <div class="seek-btn"></div>
+            <div class="btn prev">
+                <i class="fas fa-angle-double-left"></i>
             </div>
+            <div class="btn play icon-play">
+                <i class="fas fa-play-circle"></i>
+            </div>
+            <div class="btn pause icon-pause">
+                <i class="fas fa-pause"></i>
+            </div>
+            <div class="btn next">
+                <i class="fas fa-angle-double-right"></i>
+            </div>
+            <div class="btn random">
+                <i class="fas fa-random"></i>
+            </div>
+            </div>
+           
+            <input id="progress" class="progress" type="range" value="0" step="1" min="0" max="100">
+
+            <audio id="audio" src=""></audio>
         </div>
+
         <div class="play-list">
             
         </div>

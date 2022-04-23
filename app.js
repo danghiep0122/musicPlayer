@@ -1,7 +1,17 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const player = $('.player')
+const cd = $('.cd');
+const heading = $('.player .song-name')
+const cdThumb = $('.cd-thumb')
+const audio = $('#audio')
+const playBtn = $('.icon-play')
+
+
 const app = {
+    currentIndex: 0,
+    isPlaying: false,
     songs: [
         {
             name: 'Buông đôi tay nhau ra',
@@ -83,9 +93,16 @@ const app = {
         })
         $('.play-list').innerHTML = htmls.join('')
     },
+    defineProperties: function() {
+        Object.defineProperty(this, 'currentSong', {
+            get: function() {
+                return this.songs[this.currentIndex]
+            }
+        })
+    },
 
     handleEvents: function() {
-        const cd = $('.cd');
+        const _this = this
         const cdWidth = cd.offsetWidth;
 
         document.onscroll = function() {
@@ -94,10 +111,34 @@ const app = {
 
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
             cd.style.opacity = Math.abs(newCdWidth / cdWidth) 
+        };
+
+        playBtn.onclick = function() {
+            if(_this.isPlaying) {
+                _this.isPlaying = false;
+                audio.pause();
+                player.classList.remove('playing');
+            } else {
+                _this.isPlaying = true;
+                audio.play();
+                player.classList.add('playing');
+            }
         }
     },
+    loadCurrentSong: function() { 
+        heading.textContent = this.currentSong.name;
+        cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
+        audio.scr = this.currentSong.path;
+        // audio.setAttribute('type', 'audio/mpeg')
+        
+    },
     start: function() {
+        this.defineProperties ()
+        
         this. handleEvents()
+
+        this.loadCurrentSong()
+
         this.render()
     }
 }
