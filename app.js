@@ -8,12 +8,19 @@ const cdThumb = $('.cd-thumb')
 const audio = $('#audio')
 const progress = $('#progress')
 const playBtn = $('.btn-toggle-play')
+const nextBtn = $('.btn-next')
+const prevBtn = $('.btn-prev')
+const randomBtn = $('.btn-random')
+const repeatBtn = $('.btn-repeat')
+const playlist = $('.play-list')
 
 
 
 const app = {
     currentIndex: 0,
     isPlaying: false,
+    isRandom: false,
+    isRepeat: false,
     songs: [
         {
             name: 'Buông đôi tay nhau ra',
@@ -78,9 +85,9 @@ const app = {
     ],
 
     render: function() {
-        const htmls = this.songs.map(song => {
+        const htmls = this.songs.map((song, index) => {
             return `
-            <div class="song-item">
+            <div class="song-item ${index === this.currentIndex ? 'active' : ''}">
                 <div class="album-picture" 
                 style="background-image: url('${song.image}')"></div>
                 <div class="song-info">
@@ -93,7 +100,7 @@ const app = {
             </div>
             `
         })
-        $('.play-list').innerHTML = htmls.join('')
+        playlist.innerHTML = htmls.join('')
     },
     defineProperties: function() {
         Object.defineProperty(this, 'currentSong', {
@@ -132,6 +139,7 @@ const app = {
             }
         }
 
+       
         //Song playing
         audio.onplay = function() {
             _this.isPlaying = true
@@ -156,11 +164,86 @@ const app = {
             const seekTime = Math.floor(e.target.value / 100  * audio.duration);
             audio.currentTime = seekTime;
         }
+        nextBtn.onclick = function() {
+            if (_this.isRandom) {
+            _this.playRandom()
+            } else {
+                _this.nextSong()
+            }
+            audio.play()
+            _this.render()
+            _this.scrollToActiveSong()
+        }
+        prevBtn.onclick = function() {
+            if (_this.isRandom) {
+            _this.playRandom()
+            } else {
+                _this.prevSong()
+            }
+            audio.play()
+            _this.render()
+            _this.scrollToActiveSong()
+        }
+        randomBtn.onclick = function() {
+            _this.isRandom = !_this.isRandom
+            randomBtn.classList.toggle('active', _this.isRandom) 
+        }
+        repeatBtn.onclick = function() {
+            _this.isRepeat = !_this.isRepeat
+            repeatBtn.classList.toggle('active', _this.isRepeat) 
+        }
+
+        audio.onended = function () {
+            if (_this.isRepeat) {
+                audio.play();
+            } else {
+                nextBtn.click()
+            }
+        }
+
+        playlist.onclick = function (e) {
+            if (e.target.closest('.song-item:not(.active)')|| e.target.closest('.song-menu')) {
+                console.log(e.target);
+            }
+        }
     },
+    scrollToActiveSong: function() {
+        setTimeout(() => {
+            $('.song-item.active').scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+            })
+        }, 250)
+    },
+
     loadCurrentSong: function() { 
         heading.textContent = this.currentSong.name;
         cdThumb.style.backgroundImage = `url('${this.currentSong.image}')`
         audio.src = this.currentSong.path;
+    },
+    nextSong: function() {
+        this.currentIndex++
+        if(this.currentIndex >= this.songs.length) {
+            this.currentIndex = 0
+        }
+        this.loadCurrentSong()
+    },
+
+    prevSong: function() {
+        this.currentIndex--
+        if(this.currentIndex < 0) {
+            this.currentIndex = this.songs.length -1 
+        }
+        this.loadCurrentSong()
+    },
+    playRandom: function() {
+        let newIndex
+        do {
+            newIndex = Math.floor(Math.random() * this.songs.length)
+        } while (newIndex === this.currentIndex)
+
+        this.currentIndex = newIndex
+        this.loadCurrentSong()
     },
     start: function() {
         this.defineProperties()

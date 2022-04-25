@@ -60,6 +60,10 @@
     margin-bottom: 35px;
 }
 
+.btn.active {
+    color: #ec1f55;
+}
+
 .player-control .fa-play-circle, .fa-pause-circle {
     font-size: 3rem;
     color: #ec1f55;
@@ -96,6 +100,7 @@
     display: flex;
     justify-content: space-around;
     align-items: center;
+    transition: all 0.2s ease;
 }
 
 .play-list .album-picture {
@@ -128,4 +133,21 @@
     font-family: sans-serif;
     font-size: 0.7rem;
     opacity: 0.7;
+}
+.song-item.active {
+    background-color: #ec1f55;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .3);
+    transform: translateX(8px) ;
+    border: violet solid 1px;
+    border-radius: 12px;
+}
+.song-item:active {
+    opacity: 0.5;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, .8);
+}
+.song-item.active .song-name,
+.song-item.active .song-menu,
+.song-item.active .song-singer {
+    color: #fff;
+    opacity: 1;
 }
