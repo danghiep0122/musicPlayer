@@ -20,6 +20,7 @@
     left: 0;
     right: 0;
     z-index: 1;
+    margin-bottom: 20px;
 }
 
 .player h3 {
@@ -58,10 +59,27 @@
     font-weight: 100;
     color: rgba(0, 0, 0, .5);
     margin-bottom: 35px;
+    height: 40px;
+}
+
+.btn.btn-toggle-play {
+    height: 40px;
+}
+
+.btn {
+    height: 30px;
+    width: 40px;
+    line-height: 30px;
+
 }
 
 .btn.active {
     color: #ec1f55;
+    height: 30px;
+    width: 40px;
+    border-radius: 50%;
+    background-color: rgba(211, 9, 9, 0.2);
+    line-height: 30px;
 }
 
 .player-control .fa-play-circle, .fa-pause-circle {
@@ -88,8 +106,9 @@
 }
 
 .play-list {
-    margin: 410px auto 10px;
     width: 90vw;
+    padding-top: 12px;
+    margin: 400px auto 0;
 }
 
 .play-list .song-item {
@@ -113,6 +132,15 @@
 .play-list .song-item .song-menu {
     font-size: 1.2rem;
     opacity: 0.5;
+    width: 30px;
+    height: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.play-list .song-item .song-menu:active {
+    opacity: .5;
 }
 
 .play-list .song-info {

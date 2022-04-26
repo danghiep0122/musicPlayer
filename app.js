@@ -1,6 +1,8 @@
 const $ = document.querySelector.bind(document);
 const $$ = document.querySelectorAll.bind(document);
 
+const PLAYER_STORAGE_KEY = 'HS_PLAYER'
+
 const player = $('.player')
 const cd = $('.cd');
 const heading = $('.player .song-name')
@@ -21,6 +23,7 @@ const app = {
     isPlaying: false,
     isRandom: false,
     isRepeat: false,
+    config: JSON.parse(localStorage.getItem(PLAYER_STORAGE_KEY)) || {},
     songs: [
         {
             name: 'Buông đôi tay nhau ra',
@@ -83,11 +86,14 @@ const app = {
             image:'/asset/img/albumThumnail/img-10.jpg'
         }
     ],
-
+    setConfig: function(key, value) {
+        this.config[key] = value;
+        localStorage.setItem(PLAYER_STORAGE_KEY, JSON.stringify(this.config))
+    },
     render: function() {
         const htmls = this.songs.map((song, index) => {
             return `
-            <div class="song-item ${index === this.currentIndex ? 'active' : ''}">
+            <div class="song-item ${index === this.currentIndex ? 'active' : ''}" data-index=${index}>
                 <div class="album-picture" 
                 style="background-image: url('${song.image}')"></div>
                 <div class="song-info">
@@ -113,6 +119,7 @@ const app = {
     handleEvents: function() {
         const _this = this
         const cdWidth = cd.offsetWidth;
+        
 
         // CD rotate 
         const cdThumbAnimate = cdThumb.animate ([
@@ -126,9 +133,11 @@ const app = {
         document.onscroll = function() {
             const scrollTop = document.documentElement.scrollTop || window.scrollY;
             const newCdWidth = cdWidth - scrollTop;
+            const playerHeight= player.offsetHeight
 
             cd.style.width = newCdWidth > 0 ? newCdWidth + 'px' : 0;
-            cd.style.opacity = Math.abs(newCdWidth / cdWidth) 
+            cd.style.opacity = Math.abs(newCdWidth / cdWidth)
+            playlist.style.margin = playerHeight + 'px auto 0'
         };
 
         playBtn.onclick = function() {
@@ -186,10 +195,12 @@ const app = {
         }
         randomBtn.onclick = function() {
             _this.isRandom = !_this.isRandom
+            _this.setConfig('isRandom', _this.isRandom)
             randomBtn.classList.toggle('active', _this.isRandom) 
         }
         repeatBtn.onclick = function() {
             _this.isRepeat = !_this.isRepeat
+            _this.setConfig('isRepeat', _this.isRepeat)
             repeatBtn.classList.toggle('active', _this.isRepeat) 
         }
 
@@ -202,8 +213,25 @@ const app = {
         }
 
         playlist.onclick = function (e) {
-            if (e.target.closest('.song-item:not(.active)')|| e.target.closest('.song-menu')) {
-                console.log(e.target);
+            const songNode = e.target.closest('.song-item:not(.active)')
+            const songMenu = e.target.closest('.song-menu')
+            if (songNode || songMenu ) {
+               if (songNode && !songMenu) {
+                   _this.currentIndex = Number(songNode.dataset.index)
+                   _this.loadCurrentSong()
+                   _this.render()
+                   audio.play()
+               }
+               if (songMenu && songNode) {
+                   const newVol = audio.volume - .07
+                   if (newVol > 0 ) {
+                       console.log(audio.volume)
+                       audio.volume = newVol
+                   } else {
+                        audio.volume = 0
+                   }
+
+               }
             }
         }
     },
